@@ -1,12 +1,12 @@
 clear variables;
-%cd('J:\Data_Tino\realScripts');
+cd('T:\Documents\tendonFibroblastQuant');
 
 
 
 %% Parameters
 parameters.downSamplingFactor = 0; %
 parameters.calculateVolume = false;
-parameters.measurementDepth = 60; % [um] 
+parameters.measurementDepth = 100; % [um] 
 %parameters.scale = [0.619 0.619 1]; % physical x y and z dimensions in [um]
 parameters.scale = [0.3095 0.3095 2];
 parameters.deadThresholdRatio = 0.1; % meanChannelDead/meanChannelAll threshold 
@@ -14,11 +14,11 @@ parameters.volumeThreshold = 50; % minimum volume to still be considered a nucle
 parameters.volumeThresholdMax = 800; % maximum volume to still be considered a nucleus [um3]
 parameters.maskThreshold = 0.7; % Threshold at which the ilastik probabilities are considered true foreground
 parameters.measuredVolume = NaN;
-parameters.saveVisualization = true;
-parameters.saveCellImage = true;
+parameters.saveVisualization = false;
+parameters.saveCellImage = false;
 %rootfolder = 'T:\Documents\Project\Data\Testdata\';
 %rootfolder = 'J:\Data_Tino\LD_1-76-xx\';
-rootfolder = 'J:\Data_Stefania\';
+rootfolder = 'P:\Data_Stefania\';
 outfileSummary = strcat(rootfolder, 'Results\ResultsSummary.csv');
 folder = strcat(rootfolder, 'ImagesChannelAll\');
 files = dir(fullfile(folder,'*.h5'));

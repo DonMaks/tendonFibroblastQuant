@@ -89,8 +89,8 @@ function [ResultsSummary, ResultsTable, OutImages, plot] = processImageStack_opt
     if parameters.saveVisualization
         fullImage = imoverlay3D(data.imageAll, maskAlive, [0 0.5 0]);
         fullImage = imoverlay3D(fullImage, maskDead, [0.5 0 0]);
-        fullImage = imoverlay3D(fullImage, maskArtefacts, [0 0 0.5]);
-        fullImage = imoverlay3D(fullImage, maskMerged, [0 0.25 0.25]);
+        fullImage = imoverlay3D(fullImage, maskArtefacts, [0 0.15 0.35]);
+        fullImage = imoverlay3D(fullImage, maskMerged, [0.15 0 0.35]);
         OutImages.full = concatImages(data.imageAll, data.imageDead, fullImage);
         OutImages.full = im2uint8(OutImages.full);
     else

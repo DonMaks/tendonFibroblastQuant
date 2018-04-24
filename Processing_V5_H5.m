@@ -1,5 +1,5 @@
 clear variables;
-cd('J:\Data_Tino\realScripts');
+%cd('J:\Data_Tino\realScripts');
 
 
 

@@ -1,7 +1,7 @@
-function [data, parameters] = loadDataH5(rootfolder, filename, parameters)
-    filename_probability = strcat(rootfolder, 'ProbabilitiesNew\', filename, '.h5');
-    filename_imageAll = strcat(rootfolder, 'ImagesChannelAll\', filename, '.h5');
-    filename_imageDead = strcat(rootfolder, 'ImagesChannelDead\', filename, '.h5');
+function [data, parameters] = loadDataH5(filename, parameters)
+    filename_probability = strcat(parameters.rootfolder, parameters.probfolder, filename, '.h5');
+    filename_imageAll = strcat(parameters.rootfolder, parameters.allfolder, filename, '.h5');
+    filename_imageDead = strcat(parameters.rootfolder, parameters.deadfolder, filename, '.h5');
     
     data.dataAll = h5read(filename_imageAll, '/export');
     data.imageAll = mat2gray(data.dataAll, [0, 2000]);

@@ -16,17 +16,20 @@ parameters.calculateVolume = false;
 parameters.measuredVolume = NaN;
 parameters.saveVisualization = false;
 parameters.saveCellImage = false;
-%rootfolder = 'T:\Documents\Project\Data\Testdata\';
-%rootfolder = 'J:\Data_Tino\LD_1-76-xx\';
-rootfolder = 'P:\Data_Stefania\';
 
-results_folder = strcat(rootfolder, 'Results_', strrep(strrep(char(datetime), ':', '-'), ' ', '-'), '\');
-if ~(7==exist(results_folder, 'dir'))
-    mkdir(results_folder)
+%parameters.rootfolder = 'T:\Documents\Project\Data\Testdata\';
+%parameters.rootfolder = 'J:\Data_Tino\LD_1-76-xx\';
+parameters.rootfolder = 'P:\Data_Stefania\';
+parameters.probfolder = 'Probabilities\';
+parameters.allfolder = 'ImagesChannelAll\';
+parameters.deadfolder = 'ImagesChannelDead\';
+parameters.results_folder = strcat(parameters.rootfolder, 'Results_', strrep(strrep(char(datetime), ':', '-'), ' ', '-'), '\');
+if ~(7==exist(parameters.results_folder, 'dir'))
+    mkdir(parameters.results_folder)
 end
 
-outfileSummary = strcat(results_folder, '01_ResultsSummary.csv');
-folder = strcat(rootfolder, 'ImagesChannelAll\');
+outfileSummary = strcat(parameters.results_folder, '01_ResultsSummary.csv');
+folder = strcat(parameters.rootfolder, 'ImagesChannelAll\');
 files = dir(fullfile(folder,'*.h5'));
 
 %write header to summary file and parameter file
@@ -35,7 +38,7 @@ header = strjoin(header, ',');
 fid = fopen(outfileSummary, 'w+');
 fprintf(fid,'%s\n',header);
 fclose(fid);
-writeStruct(strcat(results_folder, '00_Parameters.txt'), parameters);
+writeStruct(strcat(parameters.results_folder, '00_Parameters.txt'), parameters);
 
 res = struct();
 for i = 1:length(files)
@@ -46,7 +49,7 @@ for i = 1:length(files)
     disp(strcat('Starting with ', filename));
     disp('Loading Data:');
     tic
-    [data, parameters] = loadDataH5(rootfolder, filename, parameters);
+    [data, parameters] = loadDataH5(filename, parameters);
     %scale = [0.3095 0.3095 2];
     toc
 
@@ -139,14 +142,14 @@ for i = 1:length(files)
     disp('Save results table:');
     tic
     
-    writetable(ResultsTable, strcat(results_folder, filename, '.csv'));
+    writetable(ResultsTable, strcat(parameters.results_folder, filename, '.csv'));
     
     toc
     
     disp('Save results summary:');
     tic
     
-    save(strcat(results_folder, filename,'.mat'), 'ResultsSummary', 'plt');
+    save(strcat(parameters.results_folder, filename,'.mat'), 'ResultsSummary', 'plt');
     
     toc
     
@@ -154,11 +157,11 @@ for i = 1:length(files)
     tic
     
     if parameters.saveVisualization
-        writeColorStack(OutImages.full, strcat(results_folder , filename, '_full.tif'))
+        writeColorStack(OutImages.full, strcat(parameters.results_folder , filename, '_full.tif'))
     end
     
     if parameters.saveCellImage
-        writeColorStack(OutImages.cell, strcat(results_folder, filename, '_cells.tif'))
+        writeColorStack(OutImages.cell, strcat(parameters.results_folder, filename, '_cells.tif'))
     end
     toc
     

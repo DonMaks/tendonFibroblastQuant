@@ -1,5 +1,5 @@
 function [data, parameters] = loadDataH5(rootfolder, filename, parameters)
-    filename_probability = strcat(rootfolder, 'Probabilities\', filename, '.h5');
+    filename_probability = strcat(rootfolder, 'ProbabilitiesNew\', filename, '.h5');
     filename_imageAll = strcat(rootfolder, 'ImagesChannelAll\', filename, '.h5');
     filename_imageDead = strcat(rootfolder, 'ImagesChannelDead\', filename, '.h5');
     

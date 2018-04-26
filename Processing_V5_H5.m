@@ -4,32 +4,38 @@ cd('T:\Documents\tendonFibroblastQuant');
 
 
 %% Parameters
-parameters.downSamplingFactor = 0; %
-parameters.calculateVolume = false;
-parameters.measurementDepth = 100; % [um] 
 %parameters.scale = [0.619 0.619 1]; % physical x y and z dimensions in [um]
 parameters.scale = [0.3095 0.3095 2];
-parameters.deadThresholdRatio = 0.1; % meanChannelDead/meanChannelAll threshold 
+parameters.deadThresholdRatio = 0.14; % meanChannelDead/meanChannelAll threshold 
 parameters.volumeThreshold = 50; % minimum volume to still be considered a nucleus [um3]
 parameters.volumeThresholdMax = 800; % maximum volume to still be considered a nucleus [um3]
 parameters.maskThreshold = 0.7; % Threshold at which the ilastik probabilities are considered true foreground
+parameters.measurementDepth = 100; % [um] 
+parameters.downSamplingFactor = 0; %
+parameters.calculateVolume = false;
 parameters.measuredVolume = NaN;
 parameters.saveVisualization = false;
 parameters.saveCellImage = false;
 %rootfolder = 'T:\Documents\Project\Data\Testdata\';
 %rootfolder = 'J:\Data_Tino\LD_1-76-xx\';
 rootfolder = 'P:\Data_Stefania\';
-outfileSummary = strcat(rootfolder, 'Results\ResultsSummary.csv');
+
+results_folder = strcat(rootfolder, 'Results_', strrep(strrep(char(datetime), ':', '-'), ' ', '-'), '\');
+if ~(7==exist(results_folder, 'dir'))
+    mkdir(results_folder)
+end
+
+outfileSummary = strcat(results_folder, '01_ResultsSummary.csv');
 folder = strcat(rootfolder, 'ImagesChannelAll\');
 files = dir(fullfile(folder,'*.h5'));
 
-%write header to summary file
+%write header to summary file and parameter file
 header = {'Name', 'TotalCellCount', 'AliveCells', 'DeadCells', 'Artefacts', 'Volume'};
 header = strjoin(header, ',');
 fid = fopen(outfileSummary, 'w+');
 fprintf(fid,'%s\n',header);
 fclose(fid);
-
+writeStruct(strcat(results_folder, '00_Parameters.txt'), parameters);
 
 res = struct();
 for i = 1:length(files)
@@ -133,14 +139,14 @@ for i = 1:length(files)
     disp('Save results table:');
     tic
     
-    writetable(ResultsTable, strcat(rootfolder, 'Results\', filename, '.csv'));
+    writetable(ResultsTable, strcat(results_folder, filename, '.csv'));
     
     toc
     
     disp('Save results summary:');
     tic
     
-    save(strcat(rootfolder, 'Results\', filename,'.mat'), 'ResultsSummary', 'plt');
+    save(strcat(results_folder, filename,'.mat'), 'ResultsSummary', 'plt');
     
     toc
     
@@ -148,11 +154,11 @@ for i = 1:length(files)
     tic
     
     if parameters.saveVisualization
-        writeColorStack(OutImages.full, strcat(rootfolder, 'Results\', filename, '_full.tif'))
+        writeColorStack(OutImages.full, strcat(results_folder , filename, '_full.tif'))
     end
     
     if parameters.saveCellImage
-        writeColorStack(OutImages.cell, strcat(rootfolder, 'Results\', filename, '_cells.tif'))
+        writeColorStack(OutImages.cell, strcat(results_folder, filename, '_cells.tif'))
     end
     toc
     
